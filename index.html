@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Router Commands Quiz — Minecraft Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Cairo:wght@500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --grass: #6ab04c;
+            --dirt: #8e6e53;
+            --sky: #87ceeb;
+            --accent: #ffd54f;
+            --danger: #ff5252;
+            --success: #66bb6a;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(var(--sky), #cfefff 40%) fixed, linear-gradient(var(--grass), var(--grass)) 0 120px/100% 48px no-repeat, repeating-linear-gradient(0deg, var(--dirt)0 16px, #7a5b43 16px 32px) 0 168px/100% calc(100% - 168px) no-repeat;
+            font-family: "Cairo", sans-serif;
+            color: #111
+        }
+
+        .container {
+            max-width: 960px;
+            margin: auto;
+            padding: 24px
+        }
+
+        .title {
+            font-family: "Press Start 2P";
+            text-align: center;
+            color: #fff;
+            text-shadow: 3px 3px #2d6a4f;
+            background: repeating-linear-gradient(45deg, #3b7c34 0 12px, #2e6a28 12px 24px);
+            border: 6px solid #1b4d1b;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 10px 0 #1b4d1b, 0 16px 24px rgba(0, 0, 0, .25)
+        }
+
+        .hud {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            margin: 18px 0;
+            flex-wrap: wrap
+        }
+
+        .chip {
+            background: #111;
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 4px solid #333;
+            box-shadow: 0 6px 0 #333;
+            font-family: "Press Start 2P";
+            font-size: 12px
+        }
+
+        .progress {
+            flex: 1;
+            height: 18px;
+            border: 4px solid #333;
+            border-radius: 10px;
+            background: #eee
+        }
+
+        .bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #9be15d, #00d9ff);
+            border-radius: 6px;
+            transition: width .35s
+        }
+
+        .card {
+            background: #fff;
+            border: 6px solid #333;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 10px 0 #333, 0 16px 30px rgba(0, 0, 0, .25)
+        }
+
+        .q-title {
+            font-weight: 700;
+            font-size: 20px
+        }
+
+        .badge {
+            font-family: "Press Start 2P";
+            background: #ffd54f;
+            border: 3px solid #333;
+            padding: 6px 10px;
+            border-radius: 10px
+        }
+
+        .options {
+            margin-top: 14px;
+            display: grid;
+            gap: 12px
+        }
+
+        .opt {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 12px;
+            background: #f6f6f6;
+            border: 4px solid #bbb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform .05s;
+            box-shadow: 0 6px 0 #bbb
+        }
+
+        .opt:hover {
+            transform: translateY(-2px)
+        }
+
+        .opt input {
+            margin-top: 6px;
+            transform: scale(1.2)
+        }
+
+        .code {
+            direction: ltr;
+            text-align: left;
+            width: 100%;
+            background: #111;
+            color: #e5e5e5;
+            border-radius: 10px;
+            padding: 10px;
+            font-family: Consolas, monospace;
+            font-size: 14px
+        }
+
+        .btn {
+            font-family: "Press Start 2P";
+            font-size: 12px;
+            padding: 12px 16px;
+            border: 4px solid #222;
+            background: #9be15d;
+            border-radius: 12px;
+            box-shadow: 0 6px 0 #222;
+            cursor: pointer
+        }
+
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 3px 0 #222
+        }
+
+        .end {
+            display: none;
+            text-align: center
+        }
+
+        .big-score {
+            font-family: "Press Start 2P";
+            font-size: 28px;
+            margin: 10px 0
+        }
+
+        .mini {
+            background: #fff;
+            border: 4px solid #333;
+            border-radius: 12px;
+            padding: 10px;
+            text-align: right;
+            margin: 6px 0
+        }
+
+        .right {
+            color: var(--success)
+        }
+
+        .wrong {
+            color: var(--danger)
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">⚔️ Router Commands Quiz — Minecraft Edition</h1>
+        <div class="hud">
+            <div class="chip" id="chipProgress">Q 1/10</div>
+            <div class="progress">
+                <div class="bar" id="bar"></div>
+            </div>
+            <div class="chip" id="chipScore">Score 0</div>
+        </div>
+        <section class="card" id="quizCard">
+            <div class="q-title" id="qTitle"></div>
+            <div class="badge" id="qBadge">السؤال</div>
+            <div class="options" id="options"></div>
+            <div style="text-align:center;margin-top:20px"><button class="btn" id="btnNext">التالي ⏭️</button></div>
+        </section>
+        <section class="end card" id="endCard">
+            <h2>انتهى الاختبار 🎉</h2>
+            <div class="big-score" id="finalScore"></div>
+            <div id="finalMsg"></div>
+            <div id="review"></div>
+        </section>
+    </div>
+    <script>
+        const QUIZ = [
+            { q: "ما الأمر الذي ينقلك من وضع الاعدادات (Router>) إلى وضع المعلومات؟", choices: ["start", "enable", "run", "switch"], correct: 1, explain: "الأمر الصحيح هو 'enable' للانتقال من وضع المعلومات إلى وضع privileged EXEC." },
+            { q: "ما الأمر الذي يدخلك إلى وضع الإعداد العام؟", choices: ["setup", "config", "configure terminal", "interface mode"], correct: 2, explain: "'configure terminal' يفتح وضع الضبط العام." },
+            { q: "أي أمر يضع كلمة مرور لوضع الـ enable (بدون تشفير)؟", choices: ["enable secret", "enable password", "password enable", "set password"], correct: 1, explain: "'enable password' تُخزن بنص صريح." },
+            { q: "أي أمر يجعل كلمة مرور الـ enable مشفّرة؟", choices: ["enable password", "service password-encryption", "enable secret", "login secret"], correct: 2, explain: "'enable secret' تُخزن بخوارزمية hash." },
+            { q: "ما الأمر الذي يغيّر اسم الراوتر إلى R1؟", choices: ["name R1", "router name R1", "hostname R1", "setname R1"], correct: 2, explain: "'hostname R1' يغير اسم الجهاز." },
+            { q: "اختر أوامر قائمة تحكم قياسية (Standard ACL) لحجب 192.168.1.5 والسماح للبقية:", block: true, choices: [`access-list 1 deny 192.168.1.5\naccess-list 1 permit any`, `access-list deny 1 192.168.1.5\naccess-list allow any`, `deny access-list 1 192.168.1.5\npermit access-list any`, `access 1 deny ip 192.168.1.5\naccess 1 permit all`], correct: 0, explain: "الصياغة الصحيحة للـ Standard ACL هي access-list 1 deny <ip> ثم access-list 1 permit any." },
+            { q: "ما الأمر الذي يربط ACL رقم 1 بواجهة FastEthernet0/0 لاتجاه الدخول (inbound)؟", choices: ["ip access 1 in", "ip access-group 1 in", "access-group ip 1 inbound", "access 1 in"], correct: 1, explain: "استخدم 'ip access-group 1 in' داخل وضع الواجهة." },
+            { q: "الأوامر الصحيحة لإعطاء FastEthernet0/0 العنوان 192.168.1.1/24 وتشغيلها؟", block: true, choices: [`interface fastethernet0/0\nip address 192.168.1.1 255.255.255.0\nno shutdown`, `interface gigabitethernet0/0\nip add 192.168.1.1\nrun`, `interface ethernet 0\nset ip 192.168.1.1\nup`, `ip interface f0/0\nip address 192.168.1.1 255.255.255.0\nopen`], correct: 0, explain: "الأمر الصحيح: interface f0/0 ثم ip address ... ثم no shutdown." },
+            { q: "هل يمكن أن يكون عنوان IP للراوتر على المنفذ هو 192.168.1.0؟", choices: ["نعم يمكن", "لا، هذا عنوان شبكة", "نعم إذا استخدمنا mask مختلف", "يستخدم فقط مع DHCP"], correct: 1, explain: "192.168.1.0 هو عنوان شبكة Network Address وليس عنوان جهاز صالح." },
+            { q: "ما الأوامر الصحيحة لإضافة بروتوكول RIP على الراوتر؟", block: true, choices: [`router rip\nnetwork 192.168.1.0`, `rip enable\nset network 192.168.1.0`, `routing rip on\nnetwork 192.168.1.0`, `router enable rip 192.168.1.0`], correct: 0, explain: "الصحيح: router rip ثم network <network>." }
+        ];
+        let idx = 0, score = 0, picked = new Array(QUIZ.length).fill(null);
+        const qTitle = document.getElementById('qTitle'), qBadge = document.getElementById('qBadge'), optionsEl = document.getElementById('options'), chipProgress = document.getElementById('chipProgress'), chipScore = document.getElementById('chipScore'), bar = document.getElementById('bar'), btnNext = document.getElementById('btnNext'), quizCard = document.getElementById('quizCard'), endCard = document.getElementById('endCard'), finalScore = document.getElementById('finalScore'), finalMsg = document.getElementById('finalMsg'), review = document.getElementById('review');
+        function renderQ() { const item = QUIZ[idx]; qTitle.textContent = item.q; qBadge.textContent = `السؤال ${idx + 1}`; chipProgress.textContent = `Q ${idx + 1}/${QUIZ.length}`; bar.style.width = `${(idx / QUIZ.length) * 100}%`; optionsEl.innerHTML = ''; item.choices.forEach((c, i) => { const label = document.createElement('label'); label.className = 'opt'; const input = document.createElement('input'); input.type = 'radio'; input.name = 'choice'; input.value = i; const pre = document.createElement('pre'); pre.className = item.block ? 'code' : ''; pre.textContent = c; label.appendChild(input); label.appendChild(pre); optionsEl.appendChild(label); label.addEventListener('click', () => { picked[idx] = i; }); }); }
+        function next() { if (picked[idx] == null) { alert('اختر إجابة أولاً'); return; } if (idx < QUIZ.length - 1) { idx++; renderQ(); } else { finish(); } }
+        function finish() { bar.style.width = '100%'; quizCard.style.display = 'none'; endCard.style.display = 'block'; score = picked.filter((v, i) => Number(v) === Number(QUIZ[i].correct)).length; finalScore.textContent = `النتيجة: ${score} / ${QUIZ.length}`; const pct = Math.round((score / QUIZ.length) * 100); finalMsg.textContent = pct >= 90 ? '🔥 بطل الشبكات! أداء خارق.' : pct >= 70 ? '⚡ ممتاز، استمر!' : pct >= 50 ? '👍 جيد، راجع الأخطاء.' : '🛠️ تحتاج تدريب أكثر — تقدر عليها!'; review.innerHTML = ''; QUIZ.forEach((it, i) => { const ok = Number(picked[i]) === Number(it.correct); const div = document.createElement('div'); div.className = 'mini'; div.innerHTML = `<div><strong>س${i + 1}:</strong> ${ok ? '<span class=right>صحيح</span>' : '<span class=wrong>خطأ</span>'}</div><div>${it.q}</div><div style='direction:ltr;text-align:left;margin-top:6px'><strong>Correct:</strong> ${it.choices[it.correct]}</div>`; review.appendChild(div); }); }
+        btnNext.addEventListener('click', next); renderQ();
+    </script>
+</body>
+
+</html>
